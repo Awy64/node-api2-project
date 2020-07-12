@@ -1,29 +1,23 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import axios from "axios"
-import {Card, Grid, makeStyles} from "@material-ui/core"
+import { Grid } from "@material-ui/core"
+import Cards from "./components/Card.js"
 
-const useStyles = makeStyles((theme) => ({
-  
-  card: {
-    height: 140,
-    width: 800,
-    margin: 20,
-  }
-}));
+
 
 
 function App() {
-  const [posts, setPosts] = useState();
-  const classes = useStyles();
+  const [posts, setPosts] = useState([]);
+
 
   const fetchPosts = () => {
     axios.get("http://localhost:4000/api/posts")
-    .then(res => {
-      console.log(res.data)
-      setPosts(res.data)
-    })
-    .catch(err => console.log(err.message))
+      .then(res => {
+        console.log(res.data)
+        setPosts(res.data)
+      })
+      .catch(err => console.log(err.message))
   }
 
   useEffect(() => {
@@ -33,27 +27,19 @@ function App() {
   return (
     <div className="App">
       <h1>Addys Posts</h1>
-      <Grid 
-        container 
+      <Grid
+        container
         direction="column"
         justify="center"
-        alignItems="center" 
-        
-        >
-      
-      {!posts && <h2>Loading, Please Wait</h2>}
-      {posts && posts.map((post) => {
-        return(
-          
-          <Card className={classes.card} key={post.id}>
-            <div >
-              <h3>{post.title}</h3>
-              <p>{post.contents}</p>
-            </div>
-          </Card>
-          
-        
-      )})}
+        alignItems="center"
+      >
+
+
+        {posts.map((post) => {
+          return (
+            <div key={post.id}><Cards post={post} /></div>
+          )
+        })}
       </Grid>
     </div>
   );
